@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opptra BD Command Center — Implementation Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #131A48;
+    --orange: #FF5800;
+    --orange-hover: #FF8C4F;
+    --yellow: #FFFCE8;
+    --grey: #5A5A5A;
+    --grey-light: #CECECE;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --red: #c62828;
+    --red-bg: #ffebee;
+    --amber: #f57f17;
+    --amber-bg: #fff8e1;
+    --blue-bg: #e3f2fd;
+    --font-h: 'Spectral', Georgia, serif;
+    --font-b: 'Raleway', 'Segoe UI', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: var(--font-b); color: var(--grey); background: #f7f8fc; line-height:1.6; }
+
+  .header { background: var(--navy); color: white; padding: 36px 0 32px; }
+  .header-inner { max-width:1000px; margin:0 auto; padding:0 28px; }
+  .header img { height:28px; margin-bottom:20px; }
+  .header h1 { font-family:var(--font-h); font-weight:300; font-size:1.9rem; letter-spacing:-0.03em; margin-bottom:4px; }
+  .header p { font-size:0.9rem; opacity:0.7; }
+  .header .date { font-size:0.8rem; opacity:0.5; margin-top:8px; }
+
+  .main { max-width:1000px; margin:0 auto; padding:32px 28px 60px; }
+
+  /* Progress bar */
+  .progress-section { margin-bottom:36px; }
+  .progress-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .progress-header h2 { font-family:var(--font-h); font-weight:700; font-size:1.15rem; color:var(--navy); }
+  .progress-header span { font-size:0.85rem; color:var(--orange); font-weight:600; }
+  .progress-track { background:#e0e3ef; border-radius:8px; height:14px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:8px; background: linear-gradient(90deg, var(--navy) 0%, var(--orange) 100%); transition: width 0.5s; }
+  .progress-labels { display:flex; justify-content:space-between; font-size:0.72rem; color:var(--grey-light); margin-top:4px; }
+
+  /* Urgency banner */
+  .urgency-banner {
+    background: var(--orange);
+    color: white;
+    border-radius: 10px;
+    padding: 18px 24px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .urgency-banner .icon { font-size: 1.4rem; flex-shrink:0; margin-top:2px; }
+  .urgency-banner h3 { font-family:var(--font-h); font-weight:700; font-size:1rem; margin-bottom:4px; }
+  .urgency-banner p { font-size:0.85rem; opacity:0.95; }
+  .urgency-banner .actions { margin-top:10px; }
+  .urgency-banner .action-item {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-top: 4px;
+  }
+
+  /* Day blocks */
+  .day-block { margin-bottom: 28px; }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e3ef;
+  }
+  .day-badge {
+    font-family: var(--font-h);
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+  .day-badge.done { background: var(--green-bg); color: var(--green); }
+  .day-badge.partial { background: var(--amber-bg); color: var(--amber); }
+  .day-badge.pending { background: var(--red-bg); color: var(--red); }
+  .day-badge.future { background: var(--blue-bg); color: #1565c0; }
+  .day-title { font-family:var(--font-h); font-weight:600; font-size:1.05rem; color:var(--navy); }
+  .day-subtitle { font-size:0.8rem; color:var(--grey-light); }
+
+  /* Task rows */
+  .task-list { display:flex; flex-direction:column; gap:8px; }
+  .task {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: start;
+    gap: 10px;
+    background: white;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 4px rgba(19,26,72,0.05);
+    font-size: 0.88rem;
+  }
+  .task.blocked { border-left: 3px solid var(--red); }
+  .task.needs-human { border-left: 3px solid var(--amber); }
+  .task.done { opacity: 0.7; }
+
+  .task-icon { font-size:1.1rem; line-height:1.4; }
+  .task-content {}
+  .task-name { font-weight:500; color:var(--navy); }
+  .task-detail { font-size:0.8rem; color:var(--grey); margin-top:2px; }
+  .task-meta { text-align:right; white-space:nowrap; }
+  .task-owner {
+    font-size: 0.72rem;
+    background: #eef0f6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--navy);
+    font-weight: 500;
+  }
+  .task-owner.human { background: var(--amber-bg); color: var(--amber); }
+  .task-owner.blocked { background: var(--red-bg); color: var(--red); }
+  .dep-tag {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--red);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 24px 0 32px;
+    font-size: 0.78rem;
+  }
+  .legend-item { display:flex; align-items:center; gap:5px; }
+  .legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+
+  /* Next steps */
+  .next-steps {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(19,26,72,0.06);
+    margin-top: 32px;
+    border-top: 3px solid var(--orange);
+  }
+  .next-steps h2 { font-family:var(--font-h); font-weight:700; font-size:1.15rem; color:var(--navy); margin-bottom:16px; }
+  .step-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eef0f6;
+    font-size: 0.88rem;
+  }
+  .step-row:last-child { border-bottom:none; }
+  .step-num {
+    width:28px; height:28px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.78rem; font-weight:700;
+  }
+  .step-num.urgent { background: var(--orange); }
+  .step-who {
+    font-size:0.75rem; padding:3px 10px; border-radius:4px; font-weight:600;
+  }
+  .step-who.suphasak { background:var(--amber-bg); color:var(--amber); }
+  .step-who.claude { background:var(--green-bg); color:var(--green); }
+  .step-who.team { background:var(--blue-bg); color:#1565c0; }
+  .step-effort { font-size:0.75rem; color:var(--grey-light); }
+
+  .footer { text-align:center; padding:28px; font-size:0.72rem; color:var(--grey-light); border-top:1px solid #eef0f6; }
+
+  @media (max-width:600px) {
+    .task { grid-template-columns: 24px 1fr; }
+    .task-meta { grid-column: 2; text-align:left; margin-top:4px; }
+    .step-row { grid-template-columns: 28px 1fr; gap:6px; }
+    .step-who, .step-effort { grid-column: 2; }
+    .urgency-banner { flex-direction: column; }
+  }
+
+  @media print {
+    body { background:white; }
+    .task, .next-steps { box-shadow:none; border:1px solid #ddd; }
+    .urgency-banner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <img src="https://cdn.prod.website-files.com/67a44396c211269f785f9dfe/67a4a8650573be9ae072ae9e_Opptra-logo.svg" alt="Opptra">
+    <h1>BD Command Center — Implementation Tracker</h1>
+    <p>Softlines Division &middot; Single Notion DB Architecture</p>
+    <div class="date">Last updated: April 22, 2026</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Overall Progress -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <h2>Overall Progress</h2>
+      <span>17 / 25 tasks complete (68%)</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: 68%;"></div>
+    </div>
+    <div class="progress-labels">
+      <span>Day 1 ✓</span>
+      <span>Day 2 ✓</span>
+      <span>Day 3 (now)</span>
+      <span>Day 4</span>
+      <span>Day 5</span>
+    </div>
+  </div>
+
+  <!-- Urgency Banner -->
+  <div class="urgency-banner">
+    <div class="icon">⚡</div>
+    <div>
+      <h3>3 items need human action to unblock progress</h3>
+      <p>Claude has completed all automatable work through Day 2 and most of Day 3. The remaining tasks are blocked on manual steps that only a team member can do.</p>
+      <div class="actions">
+        <span class="action-item">① Paste SLA formula in Notion</span>
+        <span class="action-item">② Create Slack channel</span>
+        <span class="action-item">③ Assign deal owners in Notion</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green);"></div> Done</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div> Needs human action</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div> Blocked by dependency</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> Future (Day 4–5)</div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-badge done">Complete</span>
+      <div>
+        <span class="day-title">Day 1 — Database Setup</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;7/7 tasks</span>
+      </div>
+    </div>
+    <div class="task-list">
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Audit existing Notion DB schema</div>
+          <div class="task-detail">Mapped all existing properties, identified gaps against BRD/PRD requirements</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Add missing properties</div>
+          <div class="task-detail">Stage Entry Date, Next Action Due, Revival Date, SLA Status, Days in Stage, Weighted Revenue, 5 milestone dates</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Configure 3 formula properties</div>
+          <div class="task-detail">Days in Stage, SLA Status (placeholder), Weighted Revenue — all via Notion API</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Create 5 database views</div>
+          <div class="task-detail">Pipeline Board (Kanban), SLA Watchlist, Revenue Forecast, Rejected Archive, On Hold / Revival</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Verify all properties render correctly</div>
+          <div class="task-detail">Spot-checked across multiple brand pages</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-badge done">Complete</span>
+      <div>
+        <span class="day-title">Day 2 — Data Backfill</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;6/6 tasks</span>
+      </div>
+    </div>
+    <div class="task-list">
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Download SL_BD_Master from Google Drive</div>
+          <div class="task-detail">Extracted pipeline data → 164 rows across India, SEA, GCC</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Build brand-to-Notion page mapping</div>
+          <div class="task-detail">33 brand-geo combos → Notion page IDs with Y1/Y3 revenue values</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Backfill Signed Timeline on 80+ brands</div>
+          <div class="task-detail">Q4'25 through Q4'26 cohorts populated from spreadsheet</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Backfill Y1 / Y3 revenue on 33 brands</div>
+          <div class="task-detail">Revenue projections populated where data available in source sheet</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Populate Stage Entry Date on 100+ brands</div>
+          <div class="task-detail">Set to 2026-04-22 to bootstrap SLA clock for all active pipeline deals</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Verify spot-checks across geos</div>
+          <div class="task-detail">Next SEA, Jack & Jones India, Bugatti GCC, Pepe Jeans SEA — all correct</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-badge partial">In Progress</span>
+      <div>
+        <span class="day-title">Day 3 — SLA Calibration + Automations</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;4/7 tasks &middot; 3 blocked</span>
+      </div>
+    </div>
+    <div class="task-list">
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Recalibrate SLA to 90-day model</div>
+          <div class="task-detail">Re-benchmarked from B2B SaaS → fashion/beauty distribution. Dual-track INT (32d) / EXT (58d) model built.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Build SLA benchmark page for team sharing</div>
+          <div class="task-detail">On-brand HTML with waterfall chart, dual-track breakdown, industry sources, Notion formula</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Update project doc with 90-day thresholds</div>
+          <div class="task-detail">Decision log, formula, metric targets all revised. Full persistent memory file updated.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Prepare daily SLA check + weekly digest automation prompts</div>
+          <div class="task-detail">Scheduled task logic designed and ready to deploy. Waiting on Slack channel.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+
+      <!-- Blocked items -->
+      <div class="task needs-human">
+        <div class="task-icon">⏳</div>
+        <div class="task-content">
+          <div class="task-name">Paste SLA Status formula in Notion UI</div>
+          <div class="task-detail">Notion API doesn't support <code>lets()</code>. Full formula ready in SLA benchmark page — copy and paste into the SLA Status property. ~2 min.</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner human">Suphasak</span>
+        </div>
+      </div>
+      <div class="task needs-human">
+        <div class="task-icon">⏳</div>
+        <div class="task-content">
+          <div class="task-name">Create #softlines-bd-pipeline Slack channel</div>
+          <div class="task-detail">Dedicated channel for SLA alerts and weekly digests. Add BD team members. Once created, tell Claude the channel name.</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner human">Suphasak</span>
+        </div>
+      </div>
+      <div class="task blocked">
+        <div class="task-icon">🔒</div>
+        <div class="task-content">
+          <div class="task-name">Deploy daily SLA check + weekly digest to Slack</div>
+          <div class="task-detail">Scheduled tasks ready. Claude will deploy immediately once channel is created.</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner blocked">Blocked</span>
+          <span class="dep-tag">⤷ Needs Slack channel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-badge future">Day 4</span>
+      <div>
+        <span class="day-title">Day 4 — Notifications + Deal Owner Assignment</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;0/4 tasks &middot; depends on Day 3</span>
+      </div>
+    </div>
+    <div class="task-list">
+      <div class="task blocked">
+        <div class="task-icon">🔒</div>
+        <div class="task-content">
+          <div class="task-name">Stage transition notifications</div>
+          <div class="task-detail">Auto-notify Deal Owner, LOB Head, CEO, Brand Manager on stage changes per the notification matrix</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner blocked">Blocked</span>
+          <span class="dep-tag">⤷ Needs Slack channel</span>
+        </div>
+      </div>
+      <div class="task blocked">
+        <div class="task-icon">🔒</div>
+        <div class="task-content">
+          <div class="task-name">Overdue action alerts</div>
+          <div class="task-detail">When Next Action Due &lt; today, ping Deal Owner via Slack</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner blocked">Blocked</span>
+          <span class="dep-tag">⤷ Needs Slack channel</span>
+        </div>
+      </div>
+      <div class="task blocked">
+        <div class="task-icon">🔒</div>
+        <div class="task-content">
+          <div class="task-name">Revival reminders for Hold deals</div>
+          <div class="task-detail">When Revival Date = today, notify Deal Owner to re-engage paused brand</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner blocked">Blocked</span>
+          <span class="dep-tag">⤷ Needs Slack channel</span>
+        </div>
+      </div>
+      <div class="task needs-human">
+        <div class="task-icon">⏳</div>
+        <div class="task-content">
+          <div class="task-name">Deal Owner assignment in Notion</div>
+          <div class="task-detail">Map owners by Geo × Quadrant per SL_BD_Master: Pooja, Puneet, Harjeet, Richa (India), Carine (SEA), Sarah, Prachi, Sumit (GCC). Person property can't be set via API — must assign in Notion UI.</div>
+        </div>
+        <div class="task-meta">
+          <span class="task-owner human">BD Team</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-badge future">Day 5</span>
+      <div>
+        <span class="day-title">Day 5 — Phase 2 Integrations</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;0/4 tasks &middot; Claude Code</span>
+      </div>
+    </div>
+    <div class="task-list">
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Gmail auto-capture → create Leads in Notion</div>
+          <div class="task-detail">New brand emails automatically create Lead records in the pipeline</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+      </div>
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Slack command: /bd-status [brand]</div>
+          <div class="task-detail">Returns pipeline card with stage, SLA status, next action, owner</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+      </div>
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Calendar sync for pitch meetings</div>
+          <div class="task-detail">Auto-create Google Calendar events when Pitch Date is set in Notion</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+      </div>
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Weekly CEO report (auto-generated PDF)</div>
+          <div class="task-detail">Pipeline metrics, stage movement, SLA health — emailed every Monday</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="next-steps">
+    <h2>🎯 Immediate Next Steps to Unblock Progress</h2>
+
+    <div class="step-row">
+      <div class="step-num urgent">1</div>
+      <div>
+        <strong>Paste SLA formula in Notion</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Open BD Pipeline DB → SLA Status property → Edit formula → paste from the SLA benchmark page. This activates live SLA tracking for all 100+ brands.</span>
+      </div>
+      <span class="step-who suphasak">Suphasak</span>
+      <span class="step-effort">~2 min</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num urgent">2</div>
+      <div>
+        <strong>Create Slack channel #softlines-bd-pipeline</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Add BD team (Pooja, Puneet, Harjeet, Carine, Sarah, Richa, Prachi, Sumit + LOB Heads). This unblocks all Day 3–4 automations.</span>
+      </div>
+      <span class="step-who suphasak">Suphasak</span>
+      <span class="step-effort">~3 min</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Deploy daily SLA + weekly digest automations</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Once Slack channel exists, Claude deploys both scheduled tasks immediately. Daily alerts at 9AM GST, weekly digest Monday 8AM GST.</span>
+      </div>
+      <span class="step-who claude">Claude</span>
+      <span class="step-effort">~5 min</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div>
+        <strong>Assign Deal Owners in Notion</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Person property can't be set via API. Team leads assign owners by Geo × Quadrant per the SL_BD_Master allocation table.</span>
+      </div>
+      <span class="step-who team">BD Team</span>
+      <span class="step-effort">~15 min</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">5</div>
+      <div>
+        <strong>Build notification matrix + Phase 2</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Stage transition alerts, overdue pings, revival reminders. Then Phase 2: Gmail capture, Slack commands, Calendar sync, CEO report.</span>
+      </div>
+      <span class="step-who claude">Claude</span>
+      <span class="step-effort">Day 4–5</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Opptra Softlines BD Command Center &middot; Implementation Tracker &middot; Updated April 22, 2026
+</div>
+
+</body>
+</html>

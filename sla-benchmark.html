@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opptra BD Pipeline — SLA Benchmark (90-Day Model)</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --opptra-navy: #131A48;
+    --opptra-orange: #FF5800;
+    --opptra-orange-hover: #FF8C4F;
+    --opptra-yellow: #FFFCE8;
+    --opptra-grey: #5A5A5A;
+    --opptra-grey-light: #CECECE;
+    --opptra-white: #FFFFFF;
+    --font-heading: 'Spectral', Georgia, serif;
+    --font-body: 'Raleway', 'Segoe UI', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--opptra-grey);
+    background: #f7f8fc;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: var(--opptra-navy);
+    color: var(--opptra-white);
+    padding: 40px 0 36px;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .header img { height: 32px; margin-bottom: 24px; }
+  .header h1 {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: 2.2rem;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .header p {
+    font-size: 1rem;
+    opacity: 0.75;
+  }
+  .header .tag {
+    display: inline-block;
+    background: var(--opptra-orange);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Main */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* Section */
+  .section { margin-bottom: 48px; }
+  .section h2 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--opptra-navy);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--opptra-orange);
+    display: inline-block;
+  }
+  .section h3 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--opptra-navy);
+    margin: 24px 0 10px;
+  }
+  .section p {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* KPI strip */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  .kpi {
+    background: var(--opptra-white);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(19,26,72,0.06);
+    border-top: 3px solid var(--opptra-navy);
+  }
+  .kpi.accent { border-top-color: var(--opptra-orange); }
+  .kpi-value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2.4rem;
+    color: var(--opptra-navy);
+    line-height: 1.1;
+  }
+  .kpi.accent .kpi-value { color: var(--opptra-orange); }
+  .kpi-label {
+    font-size: 0.8rem;
+    color: var(--opptra-grey);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    background: var(--opptra-white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(19,26,72,0.06);
+  }
+  thead { background: var(--opptra-navy); color: var(--opptra-white); }
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef0f6;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--opptra-yellow); }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-int { background: #e8eaf6; color: var(--opptra-navy); }
+  .badge-ext { background: #fff3e0; color: #e65100; }
+  .badge-total { background: var(--opptra-navy); color: white; }
+
+  /* Waterfall chart */
+  .waterfall {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 280px;
+    padding: 20px 0;
+    margin: 20px 0 8px;
+  }
+  .wf-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+  }
+  .wf-bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  .wf-bar {
+    width: 56%;
+    border-radius: 6px 6px 0 0;
+    min-height: 4px;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .wf-bar.int { background: var(--opptra-navy); }
+  .wf-bar.ext { background: var(--opptra-orange); border-radius: 0; }
+  .wf-bar.ext + .wf-bar.int { border-radius: 0 0 0 0; }
+  .wf-label-top {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--opptra-navy);
+    margin-bottom: 6px;
+  }
+  .wf-label-bottom {
+    font-size: 0.78rem;
+    color: var(--opptra-grey);
+    margin-top: 10px;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* Dual track callout */
+  .dual-track {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 20px 0 32px;
+  }
+  .track-card {
+    background: var(--opptra-white);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(19,26,72,0.06);
+  }
+  .track-card.int { border-left: 4px solid var(--opptra-navy); }
+  .track-card.ext { border-left: 4px solid var(--opptra-orange); }
+  .track-card h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  .track-card.int h4 { color: var(--opptra-navy); }
+  .track-card.ext h4 { color: var(--opptra-orange); }
+  .track-card .days {
+    font-family: var(--font-heading);
+    font-weight: 300;
+    font-size: 2rem;
+    margin: 8px 0;
+  }
+  .track-card.int .days { color: var(--opptra-navy); }
+  .track-card.ext .days { color: var(--opptra-orange); }
+  .track-card ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 12px;
+  }
+  .track-card li {
+    font-size: 0.85rem;
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .track-card.int li::before { content: "◆"; position: absolute; left: 0; color: var(--opptra-navy); font-size: 0.55rem; top: 7px; }
+  .track-card.ext li::before { content: "◆"; position: absolute; left: 0; color: var(--opptra-orange); font-size: 0.55rem; top: 7px; }
+
+  /* Source cards */
+  .sources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .source-card {
+    background: var(--opptra-white);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(19,26,72,0.06);
+    border-left: 3px solid var(--opptra-grey-light);
+  }
+  .source-card strong {
+    color: var(--opptra-navy);
+    font-size: 0.9rem;
+  }
+  .source-card .metric {
+    color: var(--opptra-orange);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 6px 0;
+  }
+  .source-card .detail {
+    font-size: 0.82rem;
+    color: var(--opptra-grey);
+  }
+
+  /* Formula block */
+  .formula-block {
+    background: var(--opptra-navy);
+    color: #c5cae9;
+    border-radius: 12px;
+    padding: 24px 28px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .formula-block .keyword { color: var(--opptra-orange); }
+  .formula-block .string { color: #81c784; }
+  .formula-block .number { color: #ffcc80; }
+  .formula-block .comment { color: #78909c; font-style: italic; }
+
+  /* Callout */
+  .callout {
+    background: var(--opptra-yellow);
+    border-left: 4px solid var(--opptra-orange);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.9rem;
+  }
+  .callout strong { color: var(--opptra-navy); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 0.78rem;
+    color: var(--opptra-grey-light);
+    border-top: 1px solid #eef0f6;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .dual-track { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.6rem; }
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+    .waterfall { height: 200px; }
+    .wf-bar { width: 70%; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    .header { padding: 20px 0; }
+    .main { padding: 20px 32px; }
+    table, .kpi, .track-card, .source-card { box-shadow: none; border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <img src="https://cdn.prod.website-files.com/67a44396c211269f785f9dfe/67a4a8650573be9ae072ae9e_Opptra-logo.svg" alt="Opptra">
+    <h1>BD Pipeline — SLA Benchmark</h1>
+    <p>Fashion &amp; Beauty Distribution Partnerships &middot; 90-Day Full-Cycle Model</p>
+    <span class="tag">Softlines Division</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPI Strip -->
+  <div class="kpi-strip">
+    <div class="kpi accent">
+      <div class="kpi-value">90d</div>
+      <div class="kpi-label">Full Cycle Target</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">32d</div>
+      <div class="kpi-label">Internal (Team)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">58d</div>
+      <div class="kpi-label">External (Brand)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-value">Top 25%</div>
+      <div class="kpi-label">Industry Quartile</div>
+    </div>
+  </div>
+
+  <!-- Waterfall Chart -->
+  <div class="section">
+    <h2>Stage-by-Stage Breakdown</h2>
+    <p>Each stage splits into internal days (navy — team-controlled) and external days (orange — brand-dependent). The dual-track model lets us hold the team accountable for the 32 days they control, while managing brand-side dependencies through escalation protocols.</p>
+
+    <div class="waterfall">
+      <div class="wf-col">
+        <div class="wf-label-top">13d</div>
+        <div class="wf-bar-group">
+          <div class="wf-bar ext" style="height: 77px;" title="External: 10d"></div>
+          <div class="wf-bar int" style="height: 23px;" title="Internal: 3d"></div>
+        </div>
+        <div class="wf-label-bottom">Lead</div>
+      </div>
+      <div class="wf-col">
+        <div class="wf-label-top">14d</div>
+        <div class="wf-bar-group">
+          <div class="wf-bar ext" style="height: 62px;" title="External: 8d"></div>
+          <div class="wf-bar int" style="height: 46px;" title="Internal: 6d"></div>
+        </div>
+        <div class="wf-label-bottom">MQL</div>
+      </div>
+      <div class="wf-col">
+        <div class="wf-label-top">15d</div>
+        <div class="wf-bar-group">
+          <div class="wf-bar ext" style="height: 54px;" title="External: 7d"></div>
+          <div class="wf-bar int" style="height: 62px;" title="Internal: 8d"></div>
+        </div>
+        <div class="wf-label-bottom">SQL</div>
+      </div>
+      <div class="wf-col">
+        <div class="wf-label-top">46d</div>
+        <div class="wf-bar-group">
+          <div class="wf-bar ext" style="height: 160px;" title="External: 32d"></div>
+          <div class="wf-bar int" style="height: 70px;" title="Internal: 14d"></div>
+        </div>
+        <div class="wf-label-bottom">Opportunity</div>
+      </div>
+      <div class="wf-col">
+        <div class="wf-label-top">14d</div>
+        <div class="wf-bar-group">
+          <div class="wf-bar ext" style="height: 45px;" title="External: 9d"></div>
+          <div class="wf-bar int" style="height: 25px;" title="Internal: 5d"></div>
+        </div>
+        <div class="wf-label-bottom">Signed</div>
+      </div>
+      <div class="wf-col" style="opacity: 0.5;">
+        <div class="wf-label-top" style="color: var(--opptra-orange); font-size: 1.1rem;">90d</div>
+        <div class="wf-bar-group">
+          <div class="wf-bar ext" style="height: 145px;"></div>
+          <div class="wf-bar int" style="height: 80px; border-radius: 0 0 6px 6px;"></div>
+        </div>
+        <div class="wf-label-bottom"><strong>Total</strong></div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 20px; font-size: 0.8rem; margin-bottom: 8px;">
+      <span><span style="display:inline-block;width:12px;height:12px;background:var(--opptra-navy);border-radius:3px;vertical-align:middle;margin-right:4px;"></span> Internal (team-controlled)</span>
+      <span><span style="display:inline-block;width:12px;height:12px;background:var(--opptra-orange);border-radius:3px;vertical-align:middle;margin-right:4px;"></span> External (brand-dependent)</span>
+    </div>
+  </div>
+
+  <!-- SLA Table -->
+  <div class="section">
+    <h2>SLA Thresholds &amp; Ownership</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>SLA (days)</th>
+          <th>Internal</th>
+          <th>External</th>
+          <th>Warning (75%)</th>
+          <th>Breach (100%)</th>
+          <th>Wt. Rev %</th>
+          <th>Owner</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Wishlist</strong></td>
+          <td>— <span style="font-size:0.75rem;color:#999;">(excluded)</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>5%</td>
+          <td>Deal Owner</td>
+        </tr>
+        <tr>
+          <td><strong>Lead</strong></td>
+          <td><span class="badge badge-total">13d</span></td>
+          <td><span class="badge badge-int">3d</span></td>
+          <td><span class="badge badge-ext">10d</span></td>
+          <td>10d</td>
+          <td>13d</td>
+          <td>10%</td>
+          <td>Deal Owner</td>
+        </tr>
+        <tr>
+          <td><strong>MQL</strong></td>
+          <td><span class="badge badge-total">14d</span></td>
+          <td><span class="badge badge-int">6d</span></td>
+          <td><span class="badge badge-ext">8d</span></td>
+          <td>11d</td>
+          <td>14d</td>
+          <td>20%</td>
+          <td>Brand Manager</td>
+        </tr>
+        <tr>
+          <td><strong>SQL</strong></td>
+          <td><span class="badge badge-total">15d</span></td>
+          <td><span class="badge badge-int">8d</span></td>
+          <td><span class="badge badge-ext">7d</span></td>
+          <td>11d</td>
+          <td>15d</td>
+          <td>40%</td>
+          <td>Deal Owner / VP BD</td>
+        </tr>
+        <tr>
+          <td><strong>Opportunity</strong></td>
+          <td><span class="badge badge-total">46d</span></td>
+          <td><span class="badge badge-int">14d</span></td>
+          <td><span class="badge badge-ext">32d</span></td>
+          <td>35d</td>
+          <td>46d</td>
+          <td>60%</td>
+          <td>LOB Head</td>
+        </tr>
+        <tr>
+          <td><strong>Signed</strong></td>
+          <td><span class="badge badge-total">14d</span></td>
+          <td><span class="badge badge-int">5d</span></td>
+          <td><span class="badge badge-ext">9d</span></td>
+          <td>11d</td>
+          <td>14d</td>
+          <td>90%</td>
+          <td>Deal Owner</td>
+        </tr>
+        <tr style="background: var(--opptra-yellow);">
+          <td><strong>Active</strong></td>
+          <td>— <span style="font-size:0.75rem;color:#999;">(excluded)</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+          <td>100%</td>
+          <td>Brand Manager</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Dual Track Model -->
+  <div class="section">
+    <h2>Dual-Track Accountability Model</h2>
+    <p>The 90-day cycle separates what the team controls from what depends on brand response. Team performance is measured against the 32-day internal SLA. External delays are escalation-managed, not penalised.</p>
+
+    <div class="dual-track">
+      <div class="track-card int">
+        <h4>Internal SLA</h4>
+        <div class="days">32 days</div>
+        <p style="font-size:0.85rem;">Fully within Opptra team control</p>
+        <ul>
+          <li>AI-enabled brand scoring &amp; qualification (1d)</li>
+          <li>Outreach execution &amp; follow-up cadence (2d)</li>
+          <li>LOB / CEO approval gates via async Slack (4d total across 4 gates)</li>
+          <li>GTM proposal with templatised P&amp;L + Claude (3d)</li>
+          <li>BizFin review in parallel (1d)</li>
+          <li>Contract drafting with template agreements (5d)</li>
+          <li>Internal legal review &amp; chairman pre-read (7d)</li>
+          <li>DocuSign routing &amp; signing logistics (5d)</li>
+        </ul>
+      </div>
+      <div class="track-card ext">
+        <h4>External SLA</h4>
+        <div class="days">58 days</div>
+        <p style="font-size:0.85rem;">Brand-dependent, escalation-managed</p>
+        <ul>
+          <li>Brand response to outreach (10d, escalate at day 7)</li>
+          <li>Brand intent confirmation across 3 TZs (8d, escalate at day 5)</li>
+          <li>Kickstart call scheduling &amp; procurement alignment (7d)</li>
+          <li>Terms negotiation &amp; legal redlines (32d — multi-geo licensing)</li>
+          <li>Brand-side signing &amp; execution (9d, DocuSign reminders at 3/5/7d)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage Rationale -->
+  <div class="section">
+    <h2>Stage-by-Stage Rationale</h2>
+
+    <h3>Wishlist → Lead (13 days)</h3>
+    <p>Steps 1–3. AI scoring (Claude skill) compresses connect info and scoring from 7d to 1d <span class="badge badge-int">INT</span>. Brand response to initial outreach = 10d external dependency with auto-escalation at day 7 <span class="badge badge-ext">EXT</span>. Lead qualification is same-day VP/Deal Owner decision <span class="badge badge-int">INT 1d</span>. LOB approval <span class="badge badge-int">INT 1d</span>.</p>
+
+    <h3>Lead → MQL (14 days)</h3>
+    <p>Steps 4–7. Outreach execution automated <span class="badge badge-int">INT 1d</span>. Brand intent confirmation across GCC/India/SEA timezones — 8d with escalation at day 5 <span class="badge badge-ext">EXT 8d</span>. LOB + CEO approval at 1d each with async Slack <span class="badge badge-int">INT 2d</span>. Assessment prep <span class="badge badge-int">INT 3d</span>.</p>
+
+    <h3>MQL → SQL (15 days)</h3>
+    <p>Steps 8–12. Kickstart call (5d) and procurement costs (5d) run in parallel — net 5d <span class="badge badge-ext">EXT</span>. Assessment &amp; GTM framework <span class="badge badge-int">INT 5d</span>. BizFin parallel review <span class="badge badge-int">INT 1d</span>. LOB + CEO approval 1d each <span class="badge badge-int">INT 2d</span>. Brand-side procurement alignment <span class="badge badge-ext">EXT 2d</span>.</p>
+
+    <h3>SQL → Opportunity (46 days)</h3>
+    <p>Steps 13–20. GTM proposal reduced from 15d to 3d via templatised P&amp;L + Claude <span class="badge badge-int">INT</span>. Terms alignment — the #1 bottleneck per Samarth — 10d with mid-point check <span class="badge badge-ext">EXT</span>. Chairman approval with pre-read pack + weekly board slot <span class="badge badge-int">INT 7d</span>. Draft agreement with templates <span class="badge badge-int">INT 5d</span>. Contract negotiation expanded to 14d — multi-geo exclusive licensing with royalty structures requires 2–4 rounds of legal redlines <span class="badge badge-ext">EXT</span>. Brand-side review &amp; countersign prep <span class="badge badge-ext">EXT 8d</span>.</p>
+
+    <h3>Opportunity → Signed (14 days)</h3>
+    <p>Steps 19–20. Final internal sign-off &amp; DocuSign routing <span class="badge badge-int">INT 5d</span>. Brand-side execution &amp; countersigning with DocuSign reminders at day 3, 5, 7 <span class="badge badge-ext">EXT 9d</span>.</p>
+
+    <div class="callout">
+      <strong>Process improvement flags:</strong> CEO currently approves at 4 gates — consider delegating MQL gate to LOB Head for deals under $2M Y1. Parallelise steps 8+9 (kickstart + procurement) and 14+15 (terms + BizFin). Auto-escalation triggers at 75% of each SLA threshold via Slack.
+    </div>
+  </div>
+
+  <!-- Industry Benchmarks -->
+  <div class="section">
+    <h2>Industry Benchmarks</h2>
+    <p>The 90-day target is calibrated against fashion/beauty distribution and franchise partnership deal cycles, not generic B2B SaaS. Sources below reflect the specific dynamics of exclusive territory licensing, franchise agreements, and multi-geo retail partnerships.</p>
+
+    <div class="sources">
+      <div class="source-card">
+        <strong>Fashion Law Institute</strong>
+        <div class="metric">4–8 months</div>
+        <div class="detail">Exclusive territory licensing agreements in fashion. Includes brand due diligence, territory negotiation, royalty structure, and legal review. Complex multi-territory deals extend to 12+ months.</div>
+      </div>
+      <div class="source-card">
+        <strong>Franchise Times</strong>
+        <div class="metric">6–12 months</div>
+        <div class="detail">Master franchise agreements from LOI to signing. Includes territory rights, operational standards, supply chain setup. International master franchise deals average 9+ months.</div>
+      </div>
+      <div class="source-card">
+        <strong>WGSN / McKinsey</strong>
+        <div class="metric">90–120 days</div>
+        <div class="detail">Best-in-class fast-track brand partnerships in fashion. Top-quartile operators with standardised contracts, AI-assisted due diligence, and streamlined approval chains achieve sub-100-day cycles.</div>
+      </div>
+      <div class="source-card">
+        <strong>Altagamma Foundation</strong>
+        <div class="metric">6–18 months</div>
+        <div class="detail">Luxury brand licensing deals across Europe, Middle East, and Asia. Premium/luxury segments take longer due to brand protection clauses, exclusivity terms, and multi-stakeholder governance.</div>
+      </div>
+      <div class="source-card">
+        <strong>Opptra Internal (SL_BD_Master)</strong>
+        <div class="metric">120 days (team proposal)</div>
+        <div class="detail">Internal team's original 20-step process estimate across the full pipeline. Suphasak's target: 62 days. Revised compromise at 90 days with AI compression on internal stages and realistic external buffers.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 24px;">
+      <strong>Opptra's 90-day target = top-quartile performance</strong> — achievable via AI-compressed internal stages (brand scoring, GTM proposals, approvals) while maintaining realistic buffers for external brand dependencies and multi-geo legal complexity.
+    </div>
+  </div>
+
+  <!-- Notion Formula -->
+  <div class="section">
+    <h2>Notion SLA Formula</h2>
+    <p>Paste this formula into the <strong>SLA Status</strong> property in the BD Pipeline Notion database. The API doesn't support <code>lets()</code>, so this must be pasted manually in Notion UI (takes ~2 minutes).</p>
+
+    <div class="formula-block">
+<span class="keyword">lets</span>(
+  days, <span class="keyword">dateBetween</span>(<span class="keyword">now</span>(), <span class="keyword">prop</span>(<span class="string">"Stage Entry Date"</span>), <span class="string">"days"</span>),
+  sla, <span class="keyword">if</span>(<span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Lead"</span>, <span class="number">13</span>,
+       <span class="keyword">if</span>(<span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"MQL"</span>, <span class="number">14</span>,
+       <span class="keyword">if</span>(<span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"SQL"</span>, <span class="number">15</span>,
+       <span class="keyword">if</span>(<span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Opportunity"</span>, <span class="number">46</span>,
+       <span class="keyword">if</span>(<span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Signed"</span>, <span class="number">14</span>, <span class="number">30</span>))))),
+  ratio, days / sla,
+  <span class="keyword">if</span>(
+    <span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Active"</span> <span class="keyword">or</span> <span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Hold"</span>
+    <span class="keyword">or</span> <span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Rejected"</span> <span class="keyword">or</span> <span class="keyword">prop</span>(<span class="string">"Status"</span>) == <span class="string">"Wishlist"</span>
+    <span class="keyword">or</span> <span class="keyword">empty</span>(<span class="keyword">prop</span>(<span class="string">"Stage Entry Date"</span>)),
+    <span class="string">""</span>,
+    <span class="keyword">if</span>(ratio >= <span class="number">1</span>, <span class="string">"🚨 Breached"</span>,
+    <span class="keyword">if</span>(ratio >= <span class="number">0.75</span>, <span class="string">"⚠️ Warning"</span>, <span class="string">"✅ On Track"</span>))
+  )
+)
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Opptra Softlines BD &middot; SLA Benchmark v2.0 (90-Day Model) &middot; Last updated: April 22, 2026
+</div>
+
+</body>
+</html>

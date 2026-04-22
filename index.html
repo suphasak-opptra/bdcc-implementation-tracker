@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opptra BD Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@300;600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #131A48;
+    --orange: #FF5800;
+    --orange-hover: #FF8C4F;
+    --yellow: #FFFCE8;
+    --grey: #5A5A5A;
+    --grey-light: #CECECE;
+    --font-h: 'Spectral', Georgia, serif;
+    --font-b: 'Raleway', 'Segoe UI', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: var(--font-b);
+    color: var(--grey);
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 28px;
+    text-align: center;
+  }
+  .hero img { height: 36px; margin-bottom: 40px; }
+  .hero h1 {
+    font-family: var(--font-h);
+    font-weight: 300;
+    font-size: 2.6rem;
+    color: white;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero p {
+    color: rgba(255,255,255,0.55);
+    font-size: 1rem;
+    margin-bottom: 48px;
+    max-width: 460px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-decoration: none;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--orange);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(255,88,0,0.15);
+  }
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .card h2 {
+    font-family: var(--font-h);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .card .arrow {
+    color: var(--orange);
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card:hover .arrow { gap: 10px; }
+
+  .card .badge-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .card .badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .badge-live { background: rgba(46,125,50,0.2); color: #66bb6a; }
+  .badge-updated { background: rgba(255,88,0,0.2); color: var(--orange); }
+
+  .footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.25);
+  }
+  .footer a { color: rgba(255,255,255,0.35); text-decoration:none; }
+  .footer a:hover { color: var(--orange); }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.8rem; }
+    .cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <img src="https://cdn.prod.website-files.com/67a44396c211269f785f9dfe/67a4a8650573be9ae072ae9e_Opptra-logo.svg" alt="Opptra">
+  <h1>BD <span>Command Center</span></h1>
+  <p>Softlines Division — pipeline management, SLA tracking, and implementation progress for the BD team.</p>
+
+  <div class="cards">
+    <a href="./sla-benchmark.html" class="card">
+      <span class="card-icon">📊</span>
+      <div class="badge-row">
+        <span class="badge badge-live">Live</span>
+        <span class="badge badge-updated">90-Day Model</span>
+      </div>
+      <h2>SLA Benchmark</h2>
+      <p>Stage-by-stage SLA thresholds, dual-track INT/EXT model, industry benchmarks, Notion formula, and waterfall breakdown.</p>
+      <span class="arrow">View benchmark →</span>
+    </a>
+
+    <a href="./implementation-tracker.html" class="card">
+      <span class="card-icon">🚀</span>
+      <div class="badge-row">
+        <span class="badge badge-live">Live</span>
+        <span class="badge badge-updated">68% Complete</span>
+      </div>
+      <h2>Implementation Tracker</h2>
+      <p>Day 1–5 progress, blocked items, dependencies, and immediate next steps to unblock the pipeline.</p>
+      <span class="arrow">View progress →</span>
+    </a>
+  </div>
+</div>
+
+<div class="footer">
+  Opptra Softlines BD &middot; Updated April 2026 &middot; <a href="https://bd-command-center-brd-prd.vercel.app/">View BRD/PRD</a>
+</div>
+
+</body>
+</html>
