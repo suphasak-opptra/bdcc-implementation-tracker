@@ -623,6 +623,129 @@
     </div>
   </div>
 
+  <!-- Event Triggers & Automation Map -->
+  <div class="section">
+    <h2>Event Triggers Across Stages</h2>
+    <p>Each stage transition is defined by a specific event trigger — the observable action that signals a deal should progress. Automations detect these events and post to Slack for human approval before updating Notion.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Transition</th>
+          <th>Event Trigger</th>
+          <th>Detection Method</th>
+          <th>Secondary KPI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Wishlist → Lead</strong></td>
+          <td>1st response by brand with intent to engage</td>
+          <td>
+            <span class="badge badge-int">Gmail MCP</span> email/LinkedIn reply detected<br>
+            <span style="font-size:0.78rem;color:var(--opptra-grey);">LinkedIn: manual log via Slack or Notion</span>
+          </td>
+          <td style="font-size:0.82rem;"># follow-ups (outreach) with no response<br><em>→ Notion: Outreach Count</em></td>
+        </tr>
+        <tr>
+          <td><strong>Lead → MQL</strong></td>
+          <td>1st meeting conducted with brand</td>
+          <td>
+            <span class="badge badge-int">GCal MCP</span> GMeet/Zoom — detect external attendee<br>
+            <span style="font-size:0.78rem;color:var(--opptra-grey);">In-person: capture meeting note in Notion page</span>
+          </td>
+          <td style="font-size:0.82rem;"># subsequent meetings (2nd, 3rd+)<br><em>→ Notion: Meeting Count</em></td>
+        </tr>
+        <tr>
+          <td><strong>MQL → SQL</strong></td>
+          <td>1st internal deck preparation</td>
+          <td>
+            <span class="badge badge-int">Gmail MCP</span> email instruction to Kriti detected<br>
+            <span style="font-size:0.78rem;color:var(--opptra-grey);">Alt: Slack command /bd-deck-prep [brand]</span>
+          </td>
+          <td style="font-size:0.82rem;">—</td>
+        </tr>
+        <tr>
+          <td><strong>SQL → Opportunity</strong></td>
+          <td>1st deck presented + CEO approved</td>
+          <td>
+            <span class="badge badge-ext">Slack MCP</span> CEO reacts ✅ to approval request<br>
+            <span style="font-size:0.78rem;color:var(--opptra-grey);">Posted in #softlines-bd-pipeline</span>
+          </td>
+          <td style="font-size:0.82rem;">—</td>
+        </tr>
+        <tr>
+          <td><strong>Opp → Signed</strong></td>
+          <td>Contract finalised + signed</td>
+          <td>
+            <span class="badge badge-int">Drive MCP</span> signed PDF detected in shared folder<br>
+            <span style="font-size:0.78rem;color:var(--opptra-grey);">Phase 2: DocuSign webhook</span>
+          </td>
+          <td style="font-size:0.82rem;">—</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout" style="margin-top: 20px;">
+      <strong>Human-in-the-loop:</strong> All automations post detected events to #softlines-bd-pipeline on Slack for review. A team member must approve (✅ react) before Notion is updated. No auto-updates without human confirmation.
+    </div>
+  </div>
+
+  <!-- Automation Architecture -->
+  <div class="section">
+    <h2>Automation Architecture</h2>
+    <p>The BD Command Center uses a detect → notify → approve → update workflow. Claude scans connected systems daily, matches events to pipeline brands, and posts findings to Slack. Humans stay in control of every stage transition.</p>
+
+    <div class="dual-track">
+      <div class="track-card int">
+        <h4>Fully Auto-Detectable (3)</h4>
+        <div class="days" style="font-size:1.4rem;">Gmail · GCal · Drive</div>
+        <ul>
+          <li><strong>Gmail:</strong> Brand reply detection (Wishlist→Lead), deck prep emails (MQL→SQL)</li>
+          <li><strong>GCal:</strong> External attendee meetings (Lead→MQL) — <em>live and tested</em></li>
+          <li><strong>Drive:</strong> Signed contract PDFs (Opp→Signed)</li>
+        </ul>
+      </div>
+      <div class="track-card ext">
+        <h4>Semi-Auto / Human Trigger (2)</h4>
+        <div class="days" style="font-size:1.4rem;">Slack · LinkedIn</div>
+        <ul>
+          <li><strong>Slack:</strong> CEO approval via reaction (SQL→Opportunity)</li>
+          <li><strong>LinkedIn:</strong> No API — BD logs via Slack command or Notion button</li>
+          <li><strong>In-person meetings:</strong> Manual note in Notion page body</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:var(--opptra-navy);border-radius:10px;padding:18px 22px;margin-top:16px;">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="text-align:center;flex:1;min-width:120px;">
+          <div style="font-size:1.8rem;">🔍</div>
+          <div style="color:white;font-size:0.78rem;font-weight:600;margin-top:4px;">DETECT</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.7rem;">Gmail · GCal · Drive</div>
+        </div>
+        <div style="color:var(--opptra-orange);font-size:1.2rem;">→</div>
+        <div style="text-align:center;flex:1;min-width:120px;">
+          <div style="font-size:1.8rem;">📣</div>
+          <div style="color:white;font-size:0.78rem;font-weight:600;margin-top:4px;">NOTIFY</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.7rem;">Post to Slack</div>
+        </div>
+        <div style="color:var(--opptra-orange);font-size:1.2rem;">→</div>
+        <div style="text-align:center;flex:1;min-width:120px;">
+          <div style="font-size:1.8rem;">👤</div>
+          <div style="color:white;font-size:0.78rem;font-weight:600;margin-top:4px;">APPROVE</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.7rem;">Human reacts ✅</div>
+        </div>
+        <div style="color:var(--opptra-orange);font-size:1.2rem;">→</div>
+        <div style="text-align:center;flex:1;min-width:120px;">
+          <div style="font-size:1.8rem;">✏️</div>
+          <div style="color:white;font-size:0.78rem;font-weight:600;margin-top:4px;">UPDATE</div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.7rem;">Notion status change</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Notion Formula -->
   <div class="section">
     <h2>Notion SLA Formula</h2>

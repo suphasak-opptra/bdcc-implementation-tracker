@@ -223,10 +223,10 @@
   <div class="progress-section">
     <div class="progress-header">
       <h2>Overall Progress</h2>
-      <span>21 / 28 tasks complete (75%)</span>
+      <span>22 / 28 tasks complete (79%)</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 75%;"></div>
+      <div class="progress-fill" style="width: 79%;"></div>
     </div>
     <div class="progress-labels">
       <span>Day 1 ✓</span>
@@ -242,7 +242,7 @@
     <div class="icon">⚡</div>
     <div>
       <h3>CEO alignment needed to unblock remaining items</h3>
-      <p>Day 1–3 complete. Dashboards, event triggers, and Slack channel are done. SLA day-in-stage targets and deal owner assignments are pending CEO review and approval before we can activate live tracking and automations.</p>
+      <p>Day 1–3 complete. Dashboards, event triggers, GCal automation (with human-in-the-loop), and Slack channel are done. SLA day-in-stage targets and deal owner assignments are pending CEO review and approval before we can activate live tracking and remaining automations.</p>
       <div class="actions">
         <span class="action-item">① Finalise SLA targets with CEO</span>
         <span class="action-item">② Approve deal owner assignments</span>
@@ -257,6 +257,15 @@
     <div class="legend-item"><div class="legend-dot" style="background:var(--amber);"></div> Pending approval</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--red);"></div> Blocked by dependency</div>
     <div class="legend-item"><div class="legend-dot" style="background:#1565c0;"></div> In progress</div>
+  </div>
+
+  <!-- HITL Note -->
+  <div style="background:var(--amber-bg); border:1px solid #ffe082; border-radius:10px; padding:16px 20px; margin-bottom:28px; display:flex; align-items:flex-start; gap:12px;">
+    <span style="font-size:1.2rem; flex-shrink:0;">🔁</span>
+    <div>
+      <strong style="color:var(--navy); font-family:var(--font-h); font-size:0.95rem;">Human-in-the-Loop Automation</strong>
+      <p style="font-size:0.82rem; color:var(--grey); margin-top:4px;">All automations follow a 4-step HITL workflow: <strong>Detect</strong> (scheduled scan) → <strong>Notify</strong> (post to Slack) → <strong>Approve</strong> (human ✅ reaction) → <strong>Update</strong> (write to Notion). No pipeline changes are made without human review. See <a href="./sla-benchmark.html" style="color:var(--orange); font-weight:600;">automation architecture →</a></p>
+    </div>
   </div>
 
   <!-- DAY 1 -->
@@ -519,7 +528,7 @@
       <span class="day-badge partial">In Progress</span>
       <div>
         <span class="day-title">Day 5 — Phase 2 Integrations</span>
-        <span class="day-subtitle">&nbsp;&middot;&nbsp;1/5 tasks &middot; dashboards done</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;2/6 tasks &middot; dashboards + GCal automation done</span>
       </div>
     </div>
     <div class="task-list">
@@ -530,6 +539,14 @@
           <div class="task-detail">Designed and built with Claude Design + Claude Code (mockup). Dashboard views for CEO pipeline overview and BD team operational tracking of deal progress.</div>
         </div>
         <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">GCal brand meeting detector (Lead → MQL automation)</div>
+          <div class="task-detail">Scheduled task (Sun–Thu 9PM GST) scans next-day calendar events for external attendees, matches against Notion pipeline, posts to Slack #ai-softlines for human review. <strong>Human-in-the-loop:</strong> team approves via ✅ reaction before Notion is updated. See <a href="./sla-benchmark.html" style="color:var(--orange);">event triggers &amp; automation map →</a></div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
       <div class="task">
         <div class="task-icon">📋</div>
@@ -550,8 +567,8 @@
       <div class="task">
         <div class="task-icon">📋</div>
         <div class="task-content">
-          <div class="task-name">Calendar sync for pitch meetings</div>
-          <div class="task-detail">Auto-create Google Calendar events when Pitch Date is set in Notion</div>
+          <div class="task-name">Calendar sync for pitch meetings (bi-directional)</div>
+          <div class="task-detail">GCal → Notion detection is live. Next: Notion → GCal (auto-create events when Pitch Date is set). Extends existing GCal MCP integration.</div>
         </div>
         <div class="task-meta"><span class="task-owner">Claude Code</span></div>
       </div>
@@ -613,8 +630,18 @@
     <div class="step-row">
       <div class="step-num">5</div>
       <div>
+        <strong>Run GCal detector manually to pre-approve permissions</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">GCal brand meeting detector is scheduled (Sun–Thu 9PM GST). Run once manually via "Run now" to grant tool permissions for autonomous future runs. Posts to #ai-softlines with human-in-the-loop approval.</span>
+      </div>
+      <span class="step-who suphasak">Suphasak</span>
+      <span class="step-effort">~5 min</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">6</div>
+      <div>
         <strong>Continue Phase 2 integrations</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">Gmail auto-capture, /bd-status Slack command, Calendar sync, CEO weekly PDF report. Can proceed in parallel with CEO approval process.</span>
+        <span style="font-size:0.82rem;color:var(--grey);">GCal → Notion (Lead→MQL) is live. Remaining: Gmail auto-capture, /bd-status Slack command, bi-directional Calendar sync, CEO weekly PDF. Can proceed in parallel with CEO approval.</span>
       </div>
       <span class="step-who claude">Claude Code</span>
       <span class="step-effort">Day 5+</span>
