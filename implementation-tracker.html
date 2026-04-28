@@ -213,7 +213,7 @@
     <img src="https://cdn.prod.website-files.com/67a44396c211269f785f9dfe/67a4a8650573be9ae072ae9e_Opptra-logo.svg" alt="Opptra">
     <h1>BD Command Center — Implementation Tracker</h1>
     <p>Softlines Division &middot; Single Notion DB Architecture</p>
-    <div class="date">Last updated: April 24, 2026</div>
+    <div class="date">Last updated: April 28, 2026</div>
   </div>
 </div>
 
@@ -223,30 +223,32 @@
   <div class="progress-section">
     <div class="progress-header">
       <h2>Overall Progress</h2>
-      <span>22 / 28 tasks complete (79%)</span>
+      <span>25 / 36 tasks complete (69%)</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 79%;"></div>
+      <div class="progress-fill" style="width: 69%;"></div>
     </div>
     <div class="progress-labels">
       <span>Day 1 ✓</span>
       <span>Day 2 ✓</span>
       <span>Day 3 ✓</span>
-      <span>Day 4 (now)</span>
+      <span>Day 4 ✓</span>
       <span>Day 5 (in progress)</span>
+      <span>Phase 3 (new)</span>
     </div>
   </div>
 
   <!-- Urgency Banner -->
-  <div class="urgency-banner">
-    <div class="icon">⚡</div>
+  <div class="urgency-banner" style="background: var(--green);">
+    <div class="icon">✅</div>
     <div>
-      <h3>CEO alignment needed to unblock remaining items</h3>
-      <p>Day 1–3 complete. Dashboards, event triggers, GCal automation (with human-in-the-loop), and Slack channel are done. SLA day-in-stage targets and deal owner assignments are pending CEO review and approval before we can activate live tracking and remaining automations.</p>
+      <h3>Notion BD Database 100% Live — Pipeline Health Dashboard Active</h3>
+      <p>CEO aligned on SLA targets. Deal owners assigned. Event triggers + SLA communicated to BD team. Brand wishlist updated. Core CRM infrastructure complete — now entering Phase 3: automation scale-up and team enablement.</p>
       <div class="actions">
-        <span class="action-item">① Finalise SLA targets with CEO</span>
-        <span class="action-item">② Approve deal owner assignments</span>
-        <span class="action-item">③ Paste SLA formula in Notion</span>
+        <span class="action-item">① Deploy Slack approval automation</span>
+        <span class="action-item">② Build BD efficiency dashboard</span>
+        <span class="action-item">③ Set up multi-channel outreach</span>
+        <span class="action-item">④ Create team SOP</span>
       </div>
     </div>
   </div>
@@ -449,75 +451,57 @@
       <span class="day-badge partial">In Progress</span>
       <div>
         <span class="day-title">Day 4 — Notifications + Deal Owner Assignment</span>
-        <span class="day-subtitle">&nbsp;&middot;&nbsp;0/4 tasks &middot; pending CEO approval</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;3/6 tasks &middot; CEO aligned, owners assigned</span>
       </div>
     </div>
     <div class="task-list">
-      <div class="task needs-human">
-        <div class="task-icon">⏳</div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
         <div class="task-content">
           <div class="task-name">Finalise SLA day-in-stage targets with CEO</div>
-          <div class="task-detail">90-day model proposed (Lead=13d, MQL=14d, SQL=15d, Opp=46d, Signed=14d). Event triggers defined — needs CEO sign-off on day targets before formula can be activated.</div>
+          <div class="task-detail">CEO aligned on 90-day model (Lead=13d, MQL=14d, SQL=15d, Opp=46d, Signed=14d). SLA targets and event triggers communicated to BD team.</div>
         </div>
-        <div class="task-meta">
-          <span class="task-owner human">CEO Approval</span>
-          <span class="dep-tag amber">⤷ Blocks SLA formula + automations</span>
-        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak</span></div>
       </div>
-      <div class="task needs-human">
-        <div class="task-icon">⏳</div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
         <div class="task-content">
           <div class="task-name">Paste SLA Status formula in Notion UI</div>
-          <div class="task-detail">Notion API doesn't support <code>lets()</code>. Formula ready in <a href="./sla-benchmark.html" style="color:var(--orange);">SLA benchmark page</a> — copy and paste into SLA Status property. ~2 min. Waiting on CEO-approved thresholds.</div>
+          <div class="task-detail">SLA formula active. Notion BD database 100% live with Pipeline Health Dashboard.</div>
         </div>
-        <div class="task-meta">
-          <span class="task-owner human">Suphasak</span>
-          <span class="dep-tag amber">⤷ After CEO approval</span>
-        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak</span></div>
       </div>
-      <div class="task blocked">
-        <div class="task-icon">🔒</div>
+      <div class="task">
+        <div class="task-icon">📋</div>
         <div class="task-content">
           <div class="task-name">Deploy daily SLA check + weekly digest to Slack</div>
-          <div class="task-detail">Scheduled tasks ready. Claude deploys to #softlines-bd-pipeline once SLA targets are confirmed.</div>
+          <div class="task-detail">SLA targets now confirmed — scheduled tasks ready to deploy to #softlines-bd-pipeline. Unblocked.</div>
         </div>
-        <div class="task-meta">
-          <span class="task-owner blocked">Blocked</span>
-          <span class="dep-tag">⤷ Needs confirmed SLA targets</span>
-        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
-      <div class="task needs-human">
-        <div class="task-icon">⏳</div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
         <div class="task-content">
           <div class="task-name">Deal Owner assignment in Notion</div>
-          <div class="task-detail">Map owners by Geo × Quadrant per SL_BD_Master: Pooja, Puneet, Harjeet, Richa (India), Carine (SEA), Sarah, Prachi, Sumit (GCC). Person property can't be set via API — must assign in Notion UI. Pending CEO approval on allocation.</div>
+          <div class="task-detail">Deal owners uploaded and assigned in Notion. Allocation by Geo × Quadrant: Pooja, Puneet, Harjeet, Richa (India), Carine (SEA), Sarah, Prachi, Sumit (GCC).</div>
         </div>
-        <div class="task-meta">
-          <span class="task-owner human">CEO + BD Team</span>
-          <span class="dep-tag amber">⤷ Pending approval</span>
-        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak + BD</span></div>
       </div>
-      <div class="task blocked">
-        <div class="task-icon">🔒</div>
+      <div class="task">
+        <div class="task-icon">📋</div>
         <div class="task-content">
           <div class="task-name">Stage transition notifications</div>
-          <div class="task-detail">Auto-notify Deal Owner, LOB Head, CEO, Brand Manager on stage changes per the notification matrix</div>
+          <div class="task-detail">Auto-notify Deal Owner, LOB Head, CEO, Brand Manager on stage changes per notification matrix. Now unblocked — deal owners + SLA targets confirmed.</div>
         </div>
-        <div class="task-meta">
-          <span class="task-owner blocked">Blocked</span>
-          <span class="dep-tag">⤷ Needs deal owners + SLA targets</span>
-        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
-      <div class="task blocked">
-        <div class="task-icon">🔒</div>
+      <div class="task">
+        <div class="task-icon">📋</div>
         <div class="task-content">
           <div class="task-name">Overdue action alerts + revival reminders</div>
-          <div class="task-detail">Ping Deal Owner when Next Action Due &lt; today. Notify on Revival Date for Hold deals.</div>
+          <div class="task-detail">Ping Deal Owner when Next Action Due &lt; today. Notify on Revival Date for Hold deals. Now unblocked — deal owners assigned.</div>
         </div>
-        <div class="task-meta">
-          <span class="task-owner blocked">Blocked</span>
-          <span class="dep-tag">⤷ Needs deal owners assigned</span>
-        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
     </div>
   </div>
@@ -527,8 +511,8 @@
     <div class="day-header">
       <span class="day-badge partial">In Progress</span>
       <div>
-        <span class="day-title">Day 5 — Phase 2 Integrations</span>
-        <span class="day-subtitle">&nbsp;&middot;&nbsp;2/6 tasks &middot; dashboards + GCal automation done</span>
+        <span class="day-title">Day 5 — Phase 2 Integrations + Team Enablement</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;5/9 tasks</span>
       </div>
     </div>
     <div class="task-list">
@@ -536,7 +520,7 @@
         <div class="task-icon">✅</div>
         <div class="task-content">
           <div class="task-name">CEO + BD team dashboards &amp; reports</div>
-          <div class="task-detail">Designed and built with Claude Design + Claude Code (mockup). Dashboard views for CEO pipeline overview and BD team operational tracking of deal progress.</div>
+          <div class="task-detail">Dashboard views for CEO pipeline overview and BD team operational tracking. Pipeline Health Dashboard active.</div>
         </div>
         <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
       </div>
@@ -544,9 +528,33 @@
         <div class="task-icon">✅</div>
         <div class="task-content">
           <div class="task-name">GCal brand meeting detector (Lead → MQL automation)</div>
-          <div class="task-detail">Scheduled task (Sun–Thu 9PM GST) scans next-day calendar events for external attendees, matches against Notion pipeline, posts to Slack #ai-softlines for human review. <strong>Human-in-the-loop:</strong> team approves via ✅ reaction before Notion is updated. See <a href="./sla-benchmark.html" style="color:var(--orange);">event triggers &amp; automation map →</a></div>
+          <div class="task-detail">Scheduled task (Sun–Thu 9PM GST) scans next-day calendar for external attendees, matches against Notion pipeline, posts to Slack for human review. <strong>HITL:</strong> team approves via ✅ reaction before Notion update. <a href="./sla-benchmark.html" style="color:var(--orange);">View automation map →</a></div>
         </div>
         <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Update brand wishlist into Notion database</div>
+          <div class="task-detail">Brand wishlist entries updated and synced into the BD Pipeline database via Cowork session (April 28).</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">SLA targets + event triggers communicated to BD team</div>
+          <div class="task-detail">CEO-approved SLA day-in-stage targets and stage transition event triggers shared with the full BD team for alignment.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak</span></div>
+      </div>
+      <div class="task done">
+        <div class="task-icon">✅</div>
+        <div class="task-content">
+          <div class="task-name">Notion BD database 100% live with Pipeline Health Dashboard</div>
+          <div class="task-detail">All properties, formulas, views, deal owners, SLA tracking, and Pipeline Health Dashboard fully operational. Database is the single source of truth for BD pipeline.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
       </div>
       <div class="task">
         <div class="task-icon">📋</div>
@@ -554,7 +562,7 @@
           <div class="task-name">Gmail auto-capture → create Leads in Notion</div>
           <div class="task-detail">New brand emails automatically create Lead records in the pipeline</div>
         </div>
-        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
       <div class="task">
         <div class="task-icon">📋</div>
@@ -562,15 +570,15 @@
           <div class="task-name">Slack command: /bd-status [brand]</div>
           <div class="task-detail">Returns pipeline card with stage, SLA status, next action, owner</div>
         </div>
-        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
       <div class="task">
         <div class="task-icon">📋</div>
         <div class="task-content">
           <div class="task-name">Calendar sync for pitch meetings (bi-directional)</div>
-          <div class="task-detail">GCal → Notion detection is live. Next: Notion → GCal (auto-create events when Pitch Date is set). Extends existing GCal MCP integration.</div>
+          <div class="task-detail">GCal → Notion detection is live. Next: Notion → GCal (auto-create events when Pitch Date is set).</div>
         </div>
-        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
       </div>
       <div class="task">
         <div class="task-icon">📋</div>
@@ -578,80 +586,125 @@
           <div class="task-name">Weekly CEO report (auto-generated PDF)</div>
           <div class="task-detail">Pipeline metrics, stage movement, SLA health — emailed every Monday</div>
         </div>
-        <div class="task-meta"><span class="task-owner">Claude Code</span></div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-badge future">Phase 3</span>
+      <div>
+        <span class="day-title">Phase 3 — Automation Scale-Up + Team Enablement</span>
+        <span class="day-subtitle">&nbsp;&middot;&nbsp;0/4 tasks &middot; new scope</span>
+      </div>
+    </div>
+    <div class="task-list">
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">BD efficiency across deal owners dashboard in Notion</div>
+          <div class="task-detail">Track actual progress per deal owner — deals moved, SLA compliance rate, average days in stage, conversion rates by owner. Enables performance visibility and workload balancing.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
+      </div>
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Automate Slack approval before stage change on Notion</div>
+          <div class="task-detail">Before any stage transition is written to Notion, post a structured approval request to Slack. BD team member reacts ✅ to confirm or ❌ to reject. Extends the HITL pattern from GCal detector to all stage changes.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Claude</span></div>
+      </div>
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Set up multi-channel outreach system</div>
+          <div class="task-detail">Capture conversations across LinkedIn, WhatsApp, and email automatically. Sync every interaction into the pipeline. Trigger follow-ups based on engagement signals, detect cold leads, suggest next best message, keep deals moving without manual tracking.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
+      </div>
+      <div class="task">
+        <div class="task-icon">📋</div>
+        <div class="task-content">
+          <div class="task-name">Create SOP for team Notion maintenance</div>
+          <div class="task-detail">Document how teams update and maintain brand status changes on Notion. Two tracks: (1) Manual updates — when and how to update in Notion UI, required fields, frequency. (2) Automated with Claude Cowork AI — what gets auto-detected, approval workflow, escalation paths.</div>
+        </div>
+        <div class="task-meta"><span class="task-owner">Suphasak + Claude</span></div>
       </div>
     </div>
   </div>
 
   <!-- NEXT STEPS -->
   <div class="next-steps">
-    <h2>🎯 Immediate Next Steps to Expedite Progress</h2>
+    <h2>🎯 Immediate Next Steps</h2>
 
     <div class="step-row">
       <div class="step-num urgent">1</div>
       <div>
-        <strong>CEO alignment on SLA day-in-stage targets</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">90-day model proposed. Event triggers already defined with BD team. Need CEO sign-off on stage durations (Lead=13d, MQL=14d, SQL=15d, Opp=46d, Signed=14d) to activate live tracking.</span>
-      </div>
-      <span class="step-who ceo">CEO</span>
-      <span class="step-effort">1 meeting</span>
-    </div>
-
-    <div class="step-row">
-      <div class="step-num urgent">2</div>
-      <div>
-        <strong>CEO approval on deal owner assignments</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">Allocation table ready (Geo × Quadrant). Owners: Pooja, Puneet, Harjeet, Richa (India), Carine (SEA), Sarah, Prachi, Sumit (GCC). Needs CEO confirmation before assigning in Notion.</span>
-      </div>
-      <span class="step-who ceo">CEO</span>
-      <span class="step-effort">Same meeting</span>
-    </div>
-
-    <div class="step-row">
-      <div class="step-num">3</div>
-      <div>
-        <strong>Paste SLA formula + assign deal owners in Notion</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">Once CEO approves: paste formula from SLA benchmark page into Notion (~2 min), then BD team assigns owners per approved allocation (~15 min).</span>
-      </div>
-      <span class="step-who suphasak">Suphasak + BD</span>
-      <span class="step-effort">~20 min</span>
-    </div>
-
-    <div class="step-row">
-      <div class="step-num">4</div>
-      <div>
-        <strong>Deploy Slack automations + notification matrix</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">Claude deploys daily SLA check (9AM GST) + weekly digest (Mon 8AM GST) to #softlines-bd-pipeline. Stage transition alerts and overdue pings follow.</span>
+        <strong>Deploy daily SLA check + weekly digest to Slack</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">SLA targets confirmed. Deploy scheduled tasks to #softlines-bd-pipeline: daily SLA check (9AM GST) + weekly pipeline digest (Mon 8AM GST). Stage transition alerts + overdue pings follow.</span>
       </div>
       <span class="step-who claude">Claude</span>
       <span class="step-effort">~10 min</span>
     </div>
 
     <div class="step-row">
+      <div class="step-num urgent">2</div>
+      <div>
+        <strong>Build Slack approval automation for stage changes</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Extend HITL pattern: before any stage transition writes to Notion, post structured approval request to Slack. Covers all transitions, not just Lead→MQL.</span>
+      </div>
+      <span class="step-who claude">Claude</span>
+      <span class="step-effort">~1 session</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div>
+        <strong>Create BD efficiency dashboard in Notion</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Track per-owner metrics: deals moved, SLA compliance, avg days in stage, conversion rates. Enables performance visibility and workload balancing across geos.</span>
+      </div>
+      <span class="step-who suphasak">Suphasak + Claude</span>
+      <span class="step-effort">~1 session</span>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">4</div>
+      <div>
+        <strong>Create SOP for team Notion maintenance</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Document two update tracks: (1) Manual — when and how to update in Notion UI, required fields, update cadence. (2) Automated — what Claude Cowork detects, approval flow, escalation paths.</span>
+      </div>
+      <span class="step-who suphasak">Suphasak + Claude</span>
+      <span class="step-effort">~1 session</span>
+    </div>
+
+    <div class="step-row">
       <div class="step-num">5</div>
       <div>
-        <strong>Run GCal detector manually to pre-approve permissions</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">GCal brand meeting detector is scheduled (Sun–Thu 9PM GST). Run once manually via "Run now" to grant tool permissions for autonomous future runs. Posts to #ai-softlines with human-in-the-loop approval.</span>
+        <strong>Set up multi-channel outreach</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Auto-capture conversations across LinkedIn, WhatsApp, email. Sync into pipeline, trigger follow-ups on engagement signals, detect cold leads, suggest next best message.</span>
       </div>
-      <span class="step-who suphasak">Suphasak</span>
-      <span class="step-effort">~5 min</span>
+      <span class="step-who suphasak">Suphasak + Claude</span>
+      <span class="step-effort">Multi-session</span>
     </div>
 
     <div class="step-row">
       <div class="step-num">6</div>
       <div>
-        <strong>Continue Phase 2 integrations</strong><br>
-        <span style="font-size:0.82rem;color:var(--grey);">GCal → Notion (Lead→MQL) is live. Remaining: Gmail auto-capture, /bd-status Slack command, bi-directional Calendar sync, CEO weekly PDF. Can proceed in parallel with CEO approval.</span>
+        <strong>Remaining Phase 2 integrations</strong><br>
+        <span style="font-size:0.82rem;color:var(--grey);">Gmail auto-capture, /bd-status Slack command, bi-directional Calendar sync, CEO weekly PDF report. Can run in parallel with Phase 3 work.</span>
       </div>
-      <span class="step-who claude">Claude Code</span>
-      <span class="step-effort">Day 5+</span>
+      <span class="step-who claude">Claude</span>
+      <span class="step-effort">Ongoing</span>
     </div>
   </div>
 
 </div>
 
 <div class="footer">
-  Opptra Softlines BD Command Center &middot; Implementation Tracker &middot; Updated April 24, 2026
+  Opptra Softlines BD Command Center &middot; Implementation Tracker &middot; Updated April 28, 2026
 </div>
 
 </body>
