@@ -130,9 +130,63 @@
   .footer a { color: rgba(255,255,255,0.35); text-decoration:none; }
   .footer a:hover { color: var(--orange); }
 
+  /* Phase 1 status */
+  .phase-status {
+    width: 100%;
+    max-width: 720px;
+    margin-bottom: 36px;
+    background: rgba(46,125,50,0.15);
+    border: 1px solid rgba(46,125,50,0.3);
+    border-radius: 14px;
+    padding: 22px 28px;
+    text-align: left;
+  }
+  .phase-status .status-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .phase-status .status-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(46,125,50,0.3);
+    color: #66bb6a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .phase-status h3 {
+    font-family: var(--font-h);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: white;
+  }
+  .phase-status .achievements {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .phase-status .ach {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.45;
+    padding-left: 18px;
+    position: relative;
+  }
+  .phase-status .ach::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #66bb6a;
+    font-weight: 700;
+  }
+
   @media (max-width: 600px) {
     .hero h1 { font-size: 1.8rem; }
     .cards { grid-template-columns: 1fr; }
+    .phase-status .achievements { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -143,7 +197,31 @@
   <h1>BD <span>Command Center</span></h1>
   <p>Softlines Division — pipeline management, SLA tracking, and implementation progress for the BD team.</p>
 
+  <div class="phase-status">
+    <div class="status-top">
+      <span class="status-badge">Phase 1 Complete</span>
+      <h3>End-to-End BD Pipeline Visibility Achieved</h3>
+    </div>
+    <div class="achievements">
+      <div class="ach">Central brand database live with 100% Quadrant 1 tracking from Lead to Sign</div>
+      <div class="ach">Automated daily briefs + weekly summaries on Slack for CEO and leadership</div>
+      <div class="ach">Hands-on Notion training with BD team + 2-week support cadence</div>
+      <div class="ach">Top-down SLA targets and KPIs cascaded to hold BD team accountable</div>
+    </div>
+  </div>
+
   <div class="cards">
+    <a href="https://www.notion.so/94b8e26202494d89a10b9d96f3a4d0f5?v=ab89e795e82b41ec88f9f246c4e45d69" target="_blank" class="card">
+      <span class="card-icon">🗄️</span>
+      <div class="badge-row">
+        <span class="badge badge-live">Live</span>
+        <span class="badge badge-updated">112 Brands</span>
+      </div>
+      <h2>BD Pipeline Database</h2>
+      <p>Central Notion database — 112 brands across India, SEA, GCC with deal owners, SLA tracking, Pipeline Health Dashboard, and 5 views.</p>
+      <span class="arrow">Open in Notion →</span>
+    </a>
+
     <a href="./sla-benchmark.html" class="card">
       <span class="card-icon">📊</span>
       <div class="badge-row">
@@ -159,10 +237,10 @@
       <span class="card-icon">🚀</span>
       <div class="badge-row">
         <span class="badge badge-live">Live</span>
-        <span class="badge badge-updated">79% Complete</span>
+        <span class="badge badge-updated">Phase 1 — 100%</span>
       </div>
       <h2>Implementation Tracker</h2>
-      <p>Day 1–5 progress, blocked items, dependencies, and immediate next steps to unblock the pipeline.</p>
+      <p>Phase 1 complete — end-to-end pipeline visibility, SLA accountability, automated Slack briefs, and Phase 2 roadmap.</p>
       <span class="arrow">View progress →</span>
     </a>
 
@@ -180,7 +258,7 @@
 </div>
 
 <div class="footer">
-  Opptra Softlines BD &middot; Updated April 24, 2026
+  Opptra Softlines BD &middot; Updated May 4, 2026
 </div>
 
 </body>
